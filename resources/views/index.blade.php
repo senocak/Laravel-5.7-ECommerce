@@ -19,7 +19,7 @@
         <header class="with-background">
             <div class="top-nav container">
                 <div class="top-nav-left">
-                    <div class="logo">E-Ticaret</div>
+                    <div class="logo"><a href="/">E-Ticaret</a></div>
                     <ul>
                         <li><a href="{{url('/')}}/urun">Ürünler</a></li>
                         <li><a href="{{url('/')}}/hakkimda">Hakkımda</a></li>

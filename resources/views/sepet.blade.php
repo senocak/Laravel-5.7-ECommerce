@@ -60,14 +60,6 @@
                         </div>
                     @endforeach
                 </div>
-
-                <a class="have-code">Kuponunuz mu var?</a>
-                <div class="have-code-container">
-                    <form action="https://laravelecommerceexample.ca/coupon" method="POST">
-                        <input type="text" name="coupon_code" id="coupon_code">
-                        <button type="submit" class="button button-plain">Uygula</button>
-                    </form>
-                </div>
                 <div class="cart-totals">
                     <div class="cart-totals-left"></div>
                     <div class="cart-totals-right">

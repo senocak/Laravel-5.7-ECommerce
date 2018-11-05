@@ -63,9 +63,8 @@
                     </div>
                     <div class="spacer"></div>
                     <h2>Kart Bilgileri</h2>
-                    <div class="form-group">
-                        <label for="name_on_card">Kartın üzerindeki isim</label>
-                        <input type="text" class="form-control" id="name_on_card" name="name_on_card" value="">
+                    <div class="form-group"> 
+                        <input type="text" class="form-control" id="name_on_card" name="name_on_card" placeholder="Kartın üzerindeki isim">
                     </div>
                     <style>
                         .StripeElement {
@@ -126,14 +125,18 @@
                         {{Cart::tax()}}<br>
                         <span class="checkout-totals-total">{{Cart::total()}}</span>
 
-                    </div>
-                </div> <!-- end checkout-totals -->
+                    </div> 
+                </div>
+                <div class="have-code-container">
+                    <form action="https://laravelecommerceexample.ca/coupon" method="POST">
+                        <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Kuponunuz mu var?">
+                        <button type="submit" class="btn btn-success full-width">Uygula</button>
+                    </form>
+                </div>
             </div>
-
-        </div> <!-- end checkout-section -->
+        </div>
     </div>
 @endsection
-
 
 @section("js")
     <script>

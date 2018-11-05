@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Kategori;
 use App\Urun;
 use Cartalyst\Stripe\Exception\CardErrorException;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
@@ -12,12 +13,29 @@ use Illuminate\Support\Facades\Session;
 
 class IndexController extends Controller{
     public function anasayfa_index(){
-        $urunler=Urun::paginate(6);
+        $urunler=Urun::where("onecikan",true)->take(8)->get();
         return view("anasayfa")->withUrunler($urunler);
     }
     public function urun_index(){
-        $urunler=Urun::paginate(6);
-        return view("urunler")->withUrunler($urunler);
+        $sayfa=6;
+        $kategoriler=Kategori::all();
+        if(\request()->kategori){
+            $urunler=Urun::with("kategoriler")->whereHas('kategoriler',function ($query){
+                $query->where('url',\request()->kategori);
+            });
+            $kategoriİsmi=optional($kategoriler->where('url',\request()->kategori)->first())->isim;
+        }else{
+            $urunler=Urun::take($sayfa);
+            $kategoriİsmi="Ürünler";
+        }
+        if (\request()->fiyat=="azalan"){
+            $urunler=$urunler->orderBy("fiyat",'asc')->paginate($sayfa);
+        }else if (\request()->fiyat=="artan"){
+            $urunler=$urunler->orderBy("fiyat",'desc')->paginate($sayfa);
+        }else{
+            $urunler=$urunler->paginate($sayfa);
+        }
+        return view("urunler")->with(['kategoriler'=>$kategoriler,'urunler'=>$urunler,'kategoriismi'=>$kategoriİsmi]);
     }
     public function urun_detay($url){
         $urun=Urun::where("url",$url)->firstOrFail();
