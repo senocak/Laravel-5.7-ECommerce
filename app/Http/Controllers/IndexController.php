@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Kategori;
 use App\Urun;
-use Cartalyst\Stripe\Exception\CardErrorException;
-use Cartalyst\Stripe\Laravel\Facades\Stripe;
+use App\Kupon;
+use App\Kategori;
 use function foo\func;
 use Illuminate\Http\Request;
-use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Session;
+use Gloudemans\Shoppingcart\Facades\Cart;
+use Cartalyst\Stripe\Laravel\Facades\Stripe;
+use Cartalyst\Stripe\Exception\CardErrorException;
 
 class IndexController extends Controller{
     public function anasayfa_index(){
@@ -111,7 +112,12 @@ class IndexController extends Controller{
         return response()->json(['basarili'=>true]);
     }
     public function odeme(){
-        return view("odeme");
+        return view("odeme")->with([
+            'indirim'=>$this->getNumbers()->get('indirim'),
+            'yeniSubtotal'=>$this->getNumbers()->get('yeniSubtotal'),
+            'yeniTax'=>$this->getNumbers()->get('yeniTax'),
+            'yeniTotal'=>$this->getNumbers()->get('yeniTotal'),
+        ]);
     }
     public function odemeyap(Request $request){
         $this->validate($request,array(
@@ -123,19 +129,21 @@ class IndexController extends Controller{
             'posta_kodu'  => 'required',
             'telefon'     => 'required'
         ));
+        
         $contents=Cart::content()->map(function ($item){
             return $item->model->url.", ".$item->qty;
         })->values()->toJson();
         try{
             $odeme=Stripe::charges()->create([
-                'amount'=>Cart::total(),
+                'amount'=>$this->getNumbers()->get('yeniTotal'),
                 'currency'=>'TRY',
                 'source'=>$request->stripeToken,
                 'description'=>$request->isim." kişinin ödemesi",
                 'receipt_email'=>$request->email,
                 'metadata'=>[
-                    'contents'=>$contents,
-                    'quantity'=>Cart::instance("default")->count(),
+                    'ürünler'=>$contents,
+                    'adet'=>Cart::instance("default")->count(),
+                    'indirim'=>collect(session()->get("kupon"))->toJson(),
                 ],
             ]);
             Cart::instance("default")->destroy();
@@ -152,5 +160,40 @@ class IndexController extends Controller{
         }else{
             return view("tamamlandi");
         }
+    }
+    public function kupon(Request $request){
+        $kupon=Kupon::where("kod",$request->kod)->first();
+        if(!$kupon){
+            Session::flash('hata',"Hatalı Kupon Kodu.");
+            return redirect()->route("odeme");
+        }
+        session()->put('kupon',[
+            'isim'=>$kupon->kod,
+            'indirim'=>$kupon->discount(Cart::subtotal())
+        ]);
+        Session::flash('başarılı',"Kupon eklendi.");
+        return redirect()->route("odeme");
+    }
+    public function kupon_sil(){
+        session()->forget("kupon");
+        Session::flash('başarılı',"Kupon Silindi.");
+        return redirect()->route("odeme");
+    }
+    private function getNumbers(){        
+        $tax=config("cart.tax")/100;
+        $indirim=session()->get("kupon")["indirim"]??0;
+        $indirim=sprintf('%01.2f', $indirim);
+        //dd(sprintf('%01.2f', (Cart::subtotal())));
+        //dd($indirim);
+        $yeniSubtotal=sprintf('%01.2f', (Cart::subtotal()-$indirim));
+        $yeniTax=sprintf('%01.2f', $yeniSubtotal*$tax);
+        $yeniTotal=sprintf('%01.2f', $yeniSubtotal*(1+$tax));
+        return collect([
+            'tax'=>$tax,
+            'indirim'=>$indirim,
+            'yeniSubtotal'=>$yeniSubtotal,
+            'yeniTax'=>$yeniTax,
+            'yeniTotal'=>$yeniTotal,
+        ]);
     }
 }

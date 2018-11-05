@@ -21,7 +21,7 @@
                     <div class="product">
                         <a href="{{url("/")}}/urun/{{$urun->url}}"><img src="https://laravelecommerceexample.ca/storage/products/dummy/laptop-1.jpg" alt="product"></a>
                         <a href="{{url("/")}}/urun/{{$urun->url}}"><div class="product-name">{{$urun->isim}}</div></a>
-                        <div class="product-price">{{$urun->fiyat}}</div>
+                        <div class="product-price">{{sprintf('%01.2f', $urun->fiyat)}}₺</div>
                     </div>
                 @endforeach
             </div>

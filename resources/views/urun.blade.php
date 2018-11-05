@@ -41,7 +41,7 @@
             <h1 class="product-section-title">{{$urun->isim}}</h1>
             <div class="product-section-subtitle">{{$urun->detay}}</div>
             <div><div class="badge badge-success">Stokta</div></div>
-            <div class="product-section-price">{{$urun->fiyat}}</div>
+            <div class="product-section-price">{{presentPrice($urun->fiyat,2)}}₺</div>
             <p>{{$urun->aciklama}}</p>
             <p>&nbsp;</p>
             <form action="{{route("sepet.ekle")}}" method="POST">

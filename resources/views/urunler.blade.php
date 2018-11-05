@@ -39,7 +39,7 @@
                     <div class="product">
                         <a href="{{route("ürün.detay",$urun->url)}}"><img src="https://laravelecommerceexample.ca/storage/products/dummy/laptop-1.jpg" alt="product"></a>
                         <a href="{{route("ürün.detay",$urun->url)}}"><div class="product-name">{{$urun->isim}}</div></a>
-                        <div class="product-price">{{$urun->fiyat}}</div>
+                        <div class="product-price">{{presentPrice($urun->fiyat,2)}}₺</div>
                     </div>
                 @empty
                     <h3 style="text-align: left">Kategoriye Ürün Eklenmemiş</h3>

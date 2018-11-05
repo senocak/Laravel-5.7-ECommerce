@@ -21,3 +21,6 @@ Route::get("/tamamlandi","IndexController@tamamlandi")->name("tamamlandi");
 Route::get('/sifirla',function (){
     Cart::destroy();
 });
+
+Route::post('/kupon','IndexController@kupon')->name("kupon");
+Route::delete('/kupon','IndexController@kupon_sil')->name("kupon.sil");

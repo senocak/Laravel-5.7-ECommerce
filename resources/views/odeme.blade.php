@@ -21,14 +21,10 @@
     <div class="container">
         <h1 class="checkout-heading stylish-heading">Ödeme</h1>
         @if (Session::has('başarılı'))
-            <div class="alert alert-success">
-                <h3>Başarılı!</h3> {{Session::get('başarılı')}}
-            </div>
+            <div class="alert alert-success">{{Session::get('başarılı')}}</div>
         @endif
         @if (Session::has('hata'))
-            <div class="alert alert-warning">
-                <h3>Hata!</h3> {{Session::get('hata')}}
-            </div>
+            <div class="alert alert-warning">{{Session::get('hata')}}</div>
         @endif
 
         <div class="checkout-section">
@@ -117,22 +113,40 @@
                 <div class="checkout-totals">
                     <div class="checkout-totals-left">
                         AraToplam <br>
+                        @if(session()->has('kupon'))
+                            Kupon ({{session()->get('kupon')["isim"]}})
+                            <form action="{{route("kupon.sil")}}" method="POST" style="display:inline">
+                                {{ csrf_field() }}
+                                {{method_field("delete")}}
+                                <button type="submit" style="font-size:14px">Sil</button>
+                            </form>
+                            <hr>
+                            Yeni Fiyat<br>
+                        @endif
                         Vergi (13%)<br>
                         <span class="checkout-totals-total">Toplam</span>
                     </div>
                     <div class="checkout-totals-right">
-                        {{Cart::subtotal()}}<br>
-                        {{Cart::tax()}}<br>
-                        <span class="checkout-totals-total">{{Cart::total()}}</span>
-
+                        {{Cart::subtotal()}}₺<br>
+                        @if(session()->has('kupon'))
+                            -{{$indirim}}₺<br>
+                            <hr>
+                            {{$yeniSubtotal}}₺<br>
+                        @endif
+                        {{$yeniTax}}₺<br>
+                        <span class="checkout-totals-total">{{$yeniTotal}}₺</span>
                     </div> 
                 </div>
-                <div class="have-code-container">
-                    <form action="https://laravelecommerceexample.ca/coupon" method="POST">
-                        <input type="text" name="coupon_code" id="coupon_code" class="form-control" placeholder="Kuponunuz mu var?">
-                        <button type="submit" class="btn btn-success full-width">Uygula</button>
-                    </form>
-                </div>
+                @if(!session()->has('kupon')) 
+                    <div class="have-code-container">
+                        <form action="{{route("kupon")}}" method="POST">
+                            {{ csrf_field() }}
+                            <input type="text" name="kod" id="kod" class="form-control" placeholder="Kuponunuz mu var?">
+                            <button type="submit" class="btn btn-success full-width">Uygula</button>
+                        </form>
+                    </div>
+                    <hr>
+                @endif
             </div>
         </div>
     </div>

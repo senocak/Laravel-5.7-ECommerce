@@ -55,7 +55,7 @@
                                         @endfor
                                     </select>
                                 </div>
-                                <div>{{$urun->subtotal()}}</div>
+                                <div>{{sprintf('%01.2f', $urun->subtotal())}}₺</div>
                             </div>
                         </div>
                     @endforeach
@@ -68,9 +68,9 @@
                             Vergi (13%)<br>
                         </div>
                         <div class="cart-totals-subtotal">
-                            {{Cart::subtotal()}}<br>
-                            {{Cart::tax()}} <br>
-                            <span class="cart-totals-total">{{Cart::total()}}</span>
+                            {{presentPrice(Cart::subtotal())}}₺<br>
+                            {{presentPrice(Cart::tax())}}₺<br>
+                            <span class="cart-totals-total">{{Cart::total()}}₺</span>
                         </div>
                     </div>
                 </div>
