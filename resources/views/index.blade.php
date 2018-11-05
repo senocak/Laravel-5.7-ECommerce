@@ -1,96 +1,48 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel Ecommerce Example</title>
-
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>Laravel @yield("title")</title>
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat%7CRoboto:300,400,700" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-
         <!-- Styles -->
         <link rel="stylesheet" href="{{url("/")}}/css/app.css">
         <link rel="stylesheet" href="{{url("/")}}/css/responsive.css">
-
+        @yield("css")
     </head>
     <body>
         <header class="with-background">
             <div class="top-nav container">
                 <div class="top-nav-left">
-                    <div class="logo">Ecommerce</div>
+                    <div class="logo">E-Ticaret</div>
                     <ul>
-                        <li><a href="/shop">Shop</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="https://blog.laravelecommerceexample.ca">Blog</a></li>
+                        <li><a href="{{url('/')}}/urun">Ürünler</a></li>
+                        <li><a href="{{url('/')}}/hakkimda">Hakkımda</a></li>
+                        <li><a href="{{url('/')}}">Blog</a></li>
                     </ul>
                 </div>
                 <div class="top-nav-right">
                     <ul>
-                        <li><a href="https://laravelecommerceexample.ca/register">Sign Up</a></li>
-                        <li><a href="https://laravelecommerceexample.ca/login">Login</a></li>
-                        <li><a href="https://laravelecommerceexample.ca/cart">Cart</a></li>
+                        <li><a href="{{url('/')}}/login">Giriş Yap</a></li>
+                        <li>
+                            <a href="{{url('/')}}/sepet">Sepet
+                                @if(Cart::instance('default')->count()>0)
+                                    <span class="cart-count"><span>{{Cart::instance('default')->count()}}</span></span>
+                                @endif
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
-            <div class="hero container">
-                <div class="hero-copy">
-                    <h1>Laravel Ecommerce Demo</h1>
-                    <p>Includes multiple products, categories, a shopping cart and a checkout system with Stripe integration.</p>
-                    <div class="hero-buttons">
-                        <a href="https://www.youtube.com/playlist?list=PLEhEHUEU3x5oPTli631ZX9cxl6cU_sDaR" class="button button-white">Screencasts</a>
-                        <a href="https://github.com/drehimself/laravel-ecommerce-example" class="button button-white">GitHub</a>
-                    </div>
-                </div>
-                <div class="hero-image">
-                    <img src="img/macbook-pro-laravel.png" alt="hero image">
-                </div>
-            </div>
+            @yield("arkaplan")
         </header>
-        <div class="featured-section">
-            <div class="container">
-                <div class="products-section container">
-                    <div class="sidebar">
-                        <h3>By Category</h3>
-                        <ul>
-                            <li class=""><a href="https://laravelecommerceexample.ca/shop?category=laptops">Laptops</a></li>
-                            <li class=""><a href="https://laravelecommerceexample.ca/shop?category=desktops">Desktops</a></li>
-                            <li class=""><a href="https://laravelecommerceexample.ca/shop?category=mobile-phones">Mobile Phones</a></li>
-                            <li class=""><a href="https://laravelecommerceexample.ca/shop?category=tablets">Tablets</a></li>
-                            <li class=""><a href="https://laravelecommerceexample.ca/shop?category=tvs">TVs</a></li>
-                            <li class=""><a href="https://laravelecommerceexample.ca/shop?category=digital-cameras">Digital Cameras</a></li>
-                            <li class=""><a href="https://laravelecommerceexample.ca/shop?category=appliances">Appliances</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <div class="products-header">
-                            <h1 class="stylish-heading">Featured</h1>
-                            <div>
-                                <strong>Price: </strong>
-                                <a href="https://laravelecommerceexample.ca/shop?sort=low_high">Low to High</a> |
-                                <a href="https://laravelecommerceexample.ca/shop?sort=high_low">High to Low</a>
-                            </div>
-                        </div>
-                        <div class="products text-center">
-                            @foreach($urunler as $urun)
-                                <div class="product">
-                                    <a href="{{url("/")}}/urun/{{$urun->url}}"><img src="https://laravelecommerceexample.ca/storage/products/dummy/laptop-1.jpg" alt="product"></a>
-                                    <a href="{{url("/")}}/urun/{{$urun->url}}"><div class="product-name">{{$urun->isim}}</div></a>
-                                    <div class="product-price">{{$urun->fiyat}}</div>
-                                </div>
-                            @endforeach
-                        </div>
-                        <div class="spacer"></div>
-                        <ul class="pagination">
-                            {{$urunler->links()}}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @yield("içerik")
+
         <div class="blog-section">
             <div class="container"><h1 class="text-center">From Our Blog</h1></div>
             <div class="blog-posts">
@@ -113,17 +65,30 @@
         </div>
         <footer>
             <div class="footer-content container">
-                <div class="made-with">Made with <i class="fa fa-heart heart"></i> by Andre Madarang</div>
-                <ul>
-                    <li>Follow Me:</li>
-                    <li><a href=""><i class="fa Follow Me:"></i></a></li>
-                    <li><a href="http://andremadarang.com"><i class="fa fa-globe"></i></a></li>
-                    <li><a href="http://youtube.com/drehimself"><i class="fa fa-youtube"></i></a></li>
-                    <li><a href="http://github.com/drehimself"><i class="fa fa-github"></i></a></li>
-                    <li><a href="http://twitter.com/drehimself"><i class="fa fa-twitter"></i></a></li>
-                </ul>
+                <div class="made-with">Made by <i class="fa fa-heart heart"></i> Anıl Şenocak</div>
+                <div style="float: right">
+                    <a href="http://github.com/senocak"><i class="fa fa-github"></i></a>
+                    <a href="http://linkedin.com/in/anilsenocak"><i class="fa fa-linkedin"></i></a>
+                </div>
             </div>
         </footer>
-        <script src="js/app.js"></script>
+        <script src="{{url("/")}}/js/app.js"></script>
+        <script>
+            (function(){
+                const currentImage = document.querySelector('#currentImage');
+                const images = document.querySelectorAll('.product-section-thumbnail');
+                images.forEach((element) => element.addEventListener('click', thumbnailClick));
+                function thumbnailClick(e) {
+                    currentImage.classList.remove('active');
+                    currentImage.addEventListener('transitionend', () => {
+                        currentImage.src = this.querySelector('img').src;
+                        currentImage.classList.add('active');
+                    })
+                    images.forEach((element) => element.classList.remove('selected'));
+                    this.classList.add('selected');
+                }
+            })();
+        </script>
+        @yield("js")
     </body>
 </html>
