@@ -13,7 +13,7 @@ class UrunsTableSeeder extends Seeder
     public function run()
     {
         // Laptops
-        for ($i=1; $i <= 30; $i++) {
+        for ($i=1; $i <= 5; $i++) {
             Urun::create([
                 'isim' => 'Laptop '.$i,
                 'url' => 'laptop-'.$i,
@@ -31,7 +31,7 @@ class UrunsTableSeeder extends Seeder
         $urun->kategoriler()->attach(2);
 
         // Desktops
-        for ($i = 1; $i <= 9; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             Urun::create([
                 'isim' => 'Desktop ' . $i,
                 'url' => 'desktop-' . $i,
@@ -44,7 +44,7 @@ class UrunsTableSeeder extends Seeder
         }
 
         // Phones
-        for ($i = 1; $i <= 9; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             Urun::create([
                 'isim' => 'Phone ' . $i,
                 'url' => 'phone-' . $i,
@@ -57,7 +57,7 @@ class UrunsTableSeeder extends Seeder
         }
 
         // Tablets
-        for ($i = 1; $i <= 9; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             Urun::create([
                 'isim' => 'Tablet ' . $i,
                 'url' => 'tablet-' . $i,
@@ -70,7 +70,7 @@ class UrunsTableSeeder extends Seeder
         }
 
         // TVs
-        for ($i = 1; $i <= 9; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             Urun::create([
                 'isim' => 'TV ' . $i,
                 'url' => 'tv-' . $i,
@@ -83,7 +83,7 @@ class UrunsTableSeeder extends Seeder
         }
 
         // Cameras
-        for ($i = 1; $i <= 9; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             Urun::create([
                 'isim' => 'Camera ' . $i,
                 'url' => 'camera-' . $i,

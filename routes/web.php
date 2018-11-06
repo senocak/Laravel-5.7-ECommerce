@@ -14,17 +14,19 @@ Route::post('/sepet/kaydet/{urun}','IndexController@sepet_kaydet')->name("sepet.
 Route::delete('/kaydet/{urun}','IndexController@kaydet_urunsil')->name("kaydet.urunsil");
 Route::post('/kaydet/{urun}','IndexController@sepete_tasi')->name("kaydet.sepete_tasi");
 
-Route::get("/odeme","IndexController@odeme")->name("odeme");
-Route::post("/odeme","IndexController@odemeyap")->name("odemeyap");
-Route::get("/tamamlandi","IndexController@tamamlandi")->name("tamamlandi");
+Route::get("/odeme","IndexController@odeme")->name("odeme")->middleware('auth');
+Route::post("/odeme","IndexController@odemeyap")->name("odemeyap")->middleware('auth');
+Route::get("/tamamlandi","IndexController@tamamlandi")->name("tamamlandi")->middleware('auth');
 
 Route::get('/sifirla',function (){
     Cart::destroy();
 });
 
-Route::post('/kupon','IndexController@kupon')->name("kupon");
-Route::delete('/kupon','IndexController@kupon_sil')->name("kupon.sil");
-
+Route::post('/kupon','IndexController@kupon')->name("kupon")->middleware('auth');
+Route::delete('/kupon','IndexController@kupon_sil')->name("kupon.sil")->middleware('auth');
 
 Auth::routes();
-Route::get('/profil', 'IndexController@profil')->name('profil');
+Route::get('/profil', 'IndexController@profil')->name('profil')->middleware('auth');
+Route::post('/profil/{user}', 'IndexController@profil_guncelle')->name('profil_guncelle')->middleware('auth');
+
+Route::get('/siparis', 'IndexController@siparis')->name('siparis')->middleware('auth');

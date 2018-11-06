@@ -28,7 +28,16 @@
                 </div>
                 <div class="top-nav-right">
                     <ul>
-                        <li><a href="{{url('/')}}/login">Giriş Yap</a></li>
+                        @if (Auth::check())
+                            <li id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a>{{Auth::user()->name}}</a></li>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color:gray">
+                                <a class="dropdown-item" href="{{route("profil")}}">Profil</a>
+                                <a class="dropdown-item" href="{{route("siparis")}}">Siparişlerim</a> 
+                                <a class="dropdown-item" href="{{route("logout")}}">Çıkış Yap</a> 
+                            </div> 
+                        @else
+                            <li><a href="{{url('/')}}/login">Giriş Yap</a></li>
+                        @endif
                         <li>
                             <a href="{{url('/')}}/sepet">Sepet
                                 @if(Cart::instance('default')->count()>0)

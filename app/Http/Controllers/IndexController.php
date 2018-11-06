@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Urun;
+use App\User;
 use App\Kupon;
 use App\Kategori;
 use function foo\func;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Cartalyst\Stripe\Exception\CardErrorException;
 
 class IndexController extends Controller{
+    
     public function anasayfa_index(){
         $urunler=Urun::where("onecikan",true)->take(8)->get();
         return view("anasayfa")->withUrunler($urunler);
@@ -196,7 +199,30 @@ class IndexController extends Controller{
             'yeniTotal'=>$yeniTotal,
         ]);
     }
-    public function profil(){
-        return view("profil");
+    public function profil(User $user){
+        $user = Auth::user();
+        return view("profil",compact('user'));
+    }
+    public function profil_guncelle(User $user){
+        $this->validate(request(), [
+            'name' => 'required',
+            'email' => 'required|email'
+        ]);
+        $user->name = request('name');
+        $user->email = request('email');
+        $password=request()->password;
+        $password_confirmation=request()->password_confirmation;
+        if($password and $password_confirmation){
+            if($password==$password_confirmation){
+                $user->password = bcrypt($password);
+                Session::flash('başarılı',"Kullanıcı Adı, Email ve Şifre Değiştirildi.");
+            }else{ 
+                Session::flash('hata',"Şifreler uyuşmuyor.");
+            }
+        }else{
+            Session::flash('başarılı',"Kullanıcı Adı ve Email Değiştirildi.");
+        }
+        $user->save();
+        return redirect()->route("profil");
     }
 }
