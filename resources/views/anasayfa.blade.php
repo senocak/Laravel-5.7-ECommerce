@@ -13,6 +13,13 @@
     </div>
 @endsection
 @section("içerik")
+
+    @if (session('status'))
+        <div class="alert alert-success" role="alert">
+            {{ session('status') }}
+        </div>
+    @endif
+    
     <div class="featured-section">
         <div class="container">
             <h1 class="text-center">Laravel Eticaret</h1>
@@ -29,7 +36,5 @@
                 <a href="{{route("ürün.index")}}" class="button">Tüm Ürünleri İncele</a>
             </div>
         </div>
-
-
     </div>
 @endsection

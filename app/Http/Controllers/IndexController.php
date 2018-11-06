@@ -196,4 +196,7 @@ class IndexController extends Controller{
             'yeniTotal'=>$yeniTotal,
         ]);
     }
+    public function profil(){
+        return view("profil");
+    }
 }

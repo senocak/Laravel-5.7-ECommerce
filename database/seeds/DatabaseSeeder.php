@@ -7,5 +7,6 @@ class DatabaseSeeder extends Seeder{
         $this->call(KategoriTableSeeder::class);
         $this->call(UrunsTableSeeder::class);
         $this->call(KuponTableSeeder::class);
+        $this->call(UserTableSeeder::class);
     }
 }

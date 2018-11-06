@@ -24,3 +24,7 @@ Route::get('/sifirla',function (){
 
 Route::post('/kupon','IndexController@kupon')->name("kupon");
 Route::delete('/kupon','IndexController@kupon_sil')->name("kupon.sil");
+
+
+Auth::routes();
+Route::get('/profil', 'IndexController@profil')->name('profil');
