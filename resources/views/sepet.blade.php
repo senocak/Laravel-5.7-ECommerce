@@ -8,7 +8,7 @@
                 <span>Sepetim</span>
             </div>
             <div>
-                <form action="https://laravelecommerceexample.ca/search" method="GET" class="search-form">
+                <form action="" method="GET" class="search-form">
                     <i class="fa fa-search search-icon"></i>
                     <input type="text" name="query" id="query" value="" class="search-box" placeholder="Ürün Ara" required>
                 </form>

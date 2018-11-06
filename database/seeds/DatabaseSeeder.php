@@ -8,5 +8,7 @@ class DatabaseSeeder extends Seeder{
         $this->call(UrunsTableSeeder::class);
         $this->call(KuponTableSeeder::class);
         $this->call(UserTableSeeder::class);
+        $this->call(ResimTableseeder::class);
+        $this->call(BlogSeederTable::class);
     }
 }

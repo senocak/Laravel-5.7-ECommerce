@@ -19,11 +19,11 @@
         <header class="with-background">
             <div class="top-nav container">
                 <div class="top-nav-left">
-                    <div class="logo"><a href="/">E-Ticaret</a></div>
+                    <div class="logo"><a href="{{route("anasayfa")}}">E-Ticaret</a></div>
                     <ul>
-                        <li><a href="{{url('/')}}/urun">Ürünler</a></li>
+                        <li><a href="{{route("ürün.index")}}">Ürünler</a></li>
                         <li><a href="{{url('/')}}/hakkimda">Hakkımda</a></li>
-                        <li><a href="{{url('/')}}">Blog</a></li>
+                        <li><a href="{{route("blog.index")}}">Blog</a></li>
                     </ul>
                 </div>
                 <div class="top-nav-right">
@@ -36,10 +36,10 @@
                                 <a class="dropdown-item" href="{{route("logout")}}">Çıkış Yap</a> 
                             </div> 
                         @else
-                            <li><a href="{{url('/')}}/login">Giriş Yap</a></li>
+                            <li><a href="{{route("login")}}">Giriş Yap</a></li>
                         @endif
                         <li>
-                            <a href="{{url('/')}}/sepet">Sepet
+                            <a href="{{route("sepet")}}">Sepet
                                 @if(Cart::instance('default')->count()>0)
                                     <span class="cart-count"><span>{{Cart::instance('default')->count()}}</span></span>
                                 @endif
@@ -51,27 +51,6 @@
             @yield("arkaplan")
         </header>
         @yield("içerik")
-
-        <div class="blog-section">
-            <div class="container"><h1 class="text-center">From Our Blog</h1></div>
-            <div class="blog-posts">
-                <div class="blog-post">
-                    <a href="https://blog.laravelecommerceexample.ca/testing/"><img src="https://blog.laravelecommerceexample.ca/wp-content/uploads/2018/07/blog4-768x432.jpg" alt="Blog Image"></a>
-                    <a href="https://blog.laravelecommerceexample.ca/testing/"><h2 class="blog-title">Testing</h2></a>
-                    <div class="blog-description">Testing content here&nbsp;&nbsp;Welcome to WordPress. This is your first post. Edit or delete it, then start writing!&nbsp;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut nisl ultricies ex mollis congue. Mauris tempor justo nec lacus dignissim facilisis. Quisque in tortor justo. Pellentesque iaculis tempus venenatis. Etiam sit amet elit volutpat, egestas ipsum vel, aliquet …</div>
-                </div>
-                <div class="blog-post">
-                    <a href="https://blog.laravelecommerceexample.ca/testing/"><img src="https://blog.laravelecommerceexample.ca/wp-content/uploads/2018/07/blog4-768x432.jpg" alt="Blog Image"></a>
-                    <a href="https://blog.laravelecommerceexample.ca/testing/"><h2 class="blog-title">Testing</h2></a>
-                    <div class="blog-description">Testing content here&nbsp;&nbsp;Welcome to WordPress. This is your first post. Edit or delete it, then start writing!&nbsp;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut nisl ultricies ex mollis congue. Mauris tempor justo nec lacus dignissim facilisis. Quisque in tortor justo. Pellentesque iaculis tempus venenatis. Etiam sit amet elit volutpat, egestas ipsum vel, aliquet …</div>
-                </div>
-                <div class="blog-post">
-                    <a href="https://blog.laravelecommerceexample.ca/testing/"><img src="https://blog.laravelecommerceexample.ca/wp-content/uploads/2018/07/blog4-768x432.jpg" alt="Blog Image"></a>
-                    <a href="https://blog.laravelecommerceexample.ca/testing/"><h2 class="blog-title">Testing</h2></a>
-                    <div class="blog-description">Testing content here&nbsp;&nbsp;Welcome to WordPress. This is your first post. Edit or delete it, then start writing!&nbsp;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut nisl ultricies ex mollis congue. Mauris tempor justo nec lacus dignissim facilisis. Quisque in tortor justo. Pellentesque iaculis tempus venenatis. Etiam sit amet elit volutpat, egestas ipsum vel, aliquet …</div>
-                </div>
-            </div>
-        </div>
         <footer>
             <div class="footer-content container">
                 <div class="made-with">Made by <i class="fa fa-heart heart"></i> Anıl Şenocak</div>

@@ -30,3 +30,9 @@ Route::get('/profil', 'IndexController@profil')->name('profil')->middleware('aut
 Route::post('/profil/{user}', 'IndexController@profil_guncelle')->name('profil_guncelle')->middleware('auth');
 
 Route::get('/siparis', 'IndexController@siparis')->name('siparis')->middleware('auth');
+//Tanımlı Değil
+
+Route::get('/blog','IndexController@blog')->name("blog.index");
+Route::get('/blog/{url}','IndexController@blog_post')->name("blog.post");
+
+Route::get('/admin','AdminController@index')->name("admin.index");

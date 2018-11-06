@@ -1,11 +1,8 @@
 <?php
-
 namespace App;
-
 use Illuminate\Database\Eloquent\Model;
 
-class Kupon extends Model
-{
+class Kupon extends Model{
     public static function findByCode($code){
         return self::where("kod",$code)->first();
     }

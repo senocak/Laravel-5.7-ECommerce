@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Blog;
 use App\Urun;
 use App\User;
 use App\Kupon;
@@ -15,10 +16,10 @@ use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Cartalyst\Stripe\Exception\CardErrorException;
 
 class IndexController extends Controller{
-    
     public function anasayfa_index(){
         $urunler=Urun::where("onecikan",true)->take(8)->get();
-        return view("anasayfa")->withUrunler($urunler);
+        $blog=Blog::take(3)->get();
+        return view("anasayfa")->withUrunler($urunler)->withBlog($blog);
     }
     public function urun_index(){
         $sayfa=6;
@@ -71,7 +72,6 @@ class IndexController extends Controller{
     public function sepet_kaydet($id){
         $item=Cart::get($id);
         Cart::remove($id);
-
         $aynisi=Cart::instance("kaydet")->search(function ($cartItem,$rowId)use($id){
             return $rowId===$id;
         });
@@ -224,5 +224,13 @@ class IndexController extends Controller{
         }
         $user->save();
         return redirect()->route("profil");
+    }
+    public function blog(){
+        $blog=Blog::paginate(6);
+        return view("blog")->withBlog($blog);
+    }
+    public function blog_post($url){
+        $blog=Blog::where("url","=",$url)->firstOrFail();
+        return view("blog_post")->withBlog($blog);
     }
 }
