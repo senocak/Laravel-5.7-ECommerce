@@ -22,7 +22,6 @@
                     <div class="logo"><a href="{{route("anasayfa")}}">E-Ticaret</a></div>
                     <ul>
                         <li><a href="{{route("ürün.index")}}">Ürünler</a></li>
-                        <li><a href="{{url('/')}}/hakkimda">Hakkımda</a></li>
                         <li><a href="{{route("blog.index")}}">Blog</a></li>
                     </ul>
                 </div>

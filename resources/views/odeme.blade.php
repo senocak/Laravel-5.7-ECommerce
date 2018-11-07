@@ -26,7 +26,6 @@
         @if (Session::has('hata'))
             <div class="alert alert-warning">{{Session::get('hata')}}</div>
         @endif
-
         <div class="checkout-section">
             <div>
                 <form action="{{route("odemeyap")}}" method="POST" id="payment-form">
@@ -96,11 +95,21 @@
                     <div class="checkout-table">
                         <div class="checkout-table-row">
                             <div class="checkout-table-row-left">
-                                <img src="https://laravelecommerceexample.ca/storage/products/dummy/laptop-12.jpg" alt="item" class="checkout-table-img">
+                                @if(count($urun->model->resim)>0)
+                                        @php($i=1)
+                                        @foreach($urun->model->resim as $resim)
+                                            @if($i==1)
+                                                <img src="{{url("/")}}/img/urunler/{{$resim->resim}}" class="checkout-table-img">
+                                            @endif
+                                            @php($i++)
+                                        @endforeach
+                                    @else
+                                        <img src="{{url("/")}}/img/urunler/no-image.png" class="checkout-table-img">
+                                    @endif
                                 <div class="checkout-item-details">
                                     <div class="checkout-table-item">{{$urun->model->isim}}</div>
                                     <div class="checkout-table-description">{{$urun->model->detay}}</div>
-                                    <div class="checkout-table-price">{{$urun->model->fiyat}}</div>
+                                    <div class="checkout-table-price">{{sprintf('%01.2f', $urun->model->fiyat)}}₺</div>
                                 </div>
                             </div>
                             <div class="checkout-table-row-right">

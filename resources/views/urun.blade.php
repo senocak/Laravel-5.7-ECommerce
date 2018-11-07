@@ -30,9 +30,6 @@
                 @else
                     <img src="{{url("/")}}/img/urunler/no-image.png" alt="ürün" class="active" id="currentImage" width="180px">
                 @endif
-
-                
-                
             </div>
             <div class="product-section-images">
                 @foreach ($urun->resim as $resim)

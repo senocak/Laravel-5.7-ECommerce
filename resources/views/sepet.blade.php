@@ -30,7 +30,19 @@
                     @foreach(Cart::content() as $urun)
                         <div class="cart-table-row">
                             <div class="cart-table-row-left">
-                                <a href="{{route("ürün.detay",$urun->model->url)}}"><img src="https://laravelecommerceexample.ca/storage/products/dummy/laptop-30.jpg" alt="item" class="cart-table-img"></a>
+                                <a href="{{route("ürün.detay",$urun->model->url)}}">
+                                    @if(count($urun->model->resim)>0)
+                                        @php($i=1)
+                                        @foreach($urun->model->resim as $resim)
+                                            @if($i==1)
+                                                <img src="{{url("/")}}/img/urunler/{{$resim->resim}}" class="img-fluid">
+                                            @endif
+                                            @php($i++)
+                                        @endforeach
+                                    @else
+                                        <img src="{{url("/")}}/img/urunler/no-image.png" class="img-fluid" width="180px">
+                                    @endif
+                                </a>
                                 <div class="cart-item-details">
                                     <div class="cart-table-item"><a href="{{route("ürün.detay",$urun->model->url)}}">{{$urun->name}}</a></div>
                                     <div class="cart-table-description">{{$urun->model->detay}}</div>
@@ -91,7 +103,20 @@
                     @foreach(Cart::instance("kaydet")->content() as $urun)
                         <div class="cart-table-row">
                             <div class="cart-table-row-left">
-                                <a href="{{route("ürün.detay",$urun->model->url)}}"><img src="https://laravelecommerceexample.ca/storage/products/dummy/laptop-30.jpg" alt="item" class="cart-table-img"></a>
+                                <a href="{{route("ürün.detay",$urun->model->url)}}">
+                                    @if(count($urun->model->resim)>0)
+                                        @php($i=1)
+                                        @foreach($urun->model->resim as $resim)
+                                            @if($i==1)
+                                                <img src="{{url("/")}}/img/urunler/{{$resim->resim}}" class="img-fluid">
+                                            @endif
+                                            @php($i++)
+                                        @endforeach
+                                    @else
+                                        <img src="{{url("/")}}/img/urunler/no-image.png" class="img-fluid" width="180px">
+                                    @endif
+                                </a>
+                                
                                 <div class="cart-item-details">
                                     <div class="cart-table-item"><a href="{{route("ürün.detay",$urun->model->url)}}">{{$urun->name}}</a></div>
                                     <div class="cart-table-description">{{$urun->model->detay}}</div>
