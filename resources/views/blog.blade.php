@@ -31,7 +31,7 @@
                 <div class="blog-post">
                     <a href="{{route("blog.post",$blog_post->url)}}"><img src="{{url("/")}}/img/blog/{{ $blog_post->resim }}" alt="Blog Image"></a>
                     <a href="{{route("blog.post",$blog_post->url)}}"><h2 class="blog-title">{{$blog_post->baslik}}</h2></a>
-                    <div class="blog-description">{{$icerik}}</div>
+                    <div class="blog-description" style="text-align: justify;">{{$icerik}}</div>
                 </div>
             @endforeach
         </div>

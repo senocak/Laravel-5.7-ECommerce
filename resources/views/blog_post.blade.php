@@ -12,7 +12,7 @@
 @endsection
 @section("içerik")
     <div class="blog-section">
-        <div class="blog-description">
+        <div class="blog-description" style="text-align: justify;">
             {{$blog->icerik}}
         </div>    
     </div>
