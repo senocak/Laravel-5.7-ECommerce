@@ -10,6 +10,7 @@ class UserTableSeeder extends Seeder{
             'email'=>'anil@bilgimedya.com.tr',
             'password'=>'$2y$10$JejzXiQXwdRzN/kC2q2yOO6mYSA0ZWX2/d61Z8o///17y38eqlIPa',//Admin123
             'admin'=>1,
+            'resim'=>'anilsenocak.jpg',
         ]);
     }
 }

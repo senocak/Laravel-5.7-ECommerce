@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,7 +12,15 @@ class AdminController extends Controller{
     }
     public function index(){
         if((Auth::user()->admin)==true){
-            return view("admin.index");
+            $user = Auth::user();
+            return view("admin.anasayfa")->withUser($user);
+        }else{
+            return redirect("/");
+        }
+    }
+    public function index_update (Request $request){
+        if((Auth::user()->admin)==true){ 
+            return $request;
         }else{
             return redirect("/");
         }

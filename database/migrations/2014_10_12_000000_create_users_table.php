@@ -13,6 +13,7 @@ class CreateUsersTable extends Migration{
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('admin')->default("0");
+            $table->string("resim")->default("no-image.png");
             $table->rememberToken();
             $table->timestamps();
         });

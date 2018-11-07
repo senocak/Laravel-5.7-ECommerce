@@ -35,4 +35,6 @@ Route::get('/siparis', 'IndexController@siparis')->name('siparis')->middleware('
 Route::get('/blog','IndexController@blog')->name("blog.index");
 Route::get('/blog/{url}','IndexController@blog_post')->name("blog.post");
 
-Route::get('/admin','AdminController@index')->name("admin.index");
+Route::get('/admin','AdminController@index')->name("admin.anasayfa");
+Route::get('/admin/profil','AdminController@index')->name("admin.anasayfa");
+Route::post('/admin/{user}','AdminController@index_update')->name("admin.update");
