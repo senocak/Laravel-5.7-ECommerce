@@ -37,4 +37,16 @@ Route::get('/blog/{url}','IndexController@blog_post')->name("blog.post");
 
 Route::get('/admin','AdminController@index')->name("admin.anasayfa");
 Route::get('/admin/profil','AdminController@index')->name("admin.anasayfa");
-Route::post('/admin/{user}','AdminController@index_update')->name("admin.update");
+Route::post('/admin/{user}', 'IndexController@profil_guncelle')->name('admin.update')->middleware('auth');
+
+Route::get("/admin/kategori","AdminController@kategori_index")->name("kategori.index")->middleware("auth");
+Route::post("/admin/kategori/ekle","AdminController@kategori_ekle")->name("kategori.ekle")->middleware("auth");
+Route::get("/admin/kategori/{kategori_id}","AdminController@kategori_urun")->name("kategori.urun_index")->middleware("auth");
+Route::post("/admin/kategori/{kategori_id}/duzenle","AdminController@kategori_duzenle")->name("kategori.duzenle")->middleware("auth");
+Route::get("/admin/kategori/{kategori_id}/sil","AdminController@kategori_sil")->name("kategori.sil")->middleware("auth"); 
+Route::get("/admin/kategori/{kategori_id}/urun","AdminController@kategori_urun")->name("kategori.urun")->middleware("auth"); 
+Route::get("/admin/kategori/{kategori_id}/urun/ekle","AdminController@kategori_urun_ekle")->name("kategori.urun_ekle")->middleware("auth"); 
+Route::post("/admin/kategori/{kategori_id}/urun/ekle","AdminController@kategori_urun_ekle_post")->name("kategori.urun_ekle_post")->middleware("auth"); 
+Route::get("/admin/kategori/{kategori_id}/urun/{urun_id}/sil","AdminController@kategori_urun_sil")->name("kategori.urun_sil")->middleware("auth"); 
+Route::get("/admin/kategori/{kategori_id}/urun/{urun_id}/duzenle","AdminController@kategori_urun_duzenle")->name("kategori.urun_duzenle")->middleware("auth");
+Route::post("/admin/kategori/{kategori_id}/urun/{urun_id}/duzenle","AdminController@kategori_urun_duzenle_post")->name("kategori.urun_duzenle_post")->middleware("auth");

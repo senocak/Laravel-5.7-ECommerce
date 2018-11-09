@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Blog;
 use App\Urun;
 use App\User;
@@ -14,6 +12,8 @@ use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Cartalyst\Stripe\Exception\CardErrorException;
+use Image; 
+use Storage;
 
 class IndexController extends Controller{
     public function anasayfa_index(){
@@ -203,27 +203,36 @@ class IndexController extends Controller{
         $user = Auth::user();
         return view("profil",compact('user'));
     }
-    public function profil_guncelle(User $user){
-        $this->validate(request(), [
+    public function profil_guncelle(Request $request){
+        $user = Auth::user();
+        $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email'
         ]);
-        $user->name = request('name');
-        $user->email = request('email');
-        $password=request()->password;
-        $password_confirmation=request()->password_confirmation;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $password=$request->password;
+        $password_confirmation=$request->password_confirmation;
         if($password and $password_confirmation){
             if($password==$password_confirmation){
                 $user->password = bcrypt($password);
-                Session::flash('başarılı',"Kullanıcı Adı, Email ve Şifre Değiştirildi.");
+                Session::flash('başarılı',"Profil Değiştirildi.");
             }else{ 
                 Session::flash('hata',"Şifreler uyuşmuyor.");
             }
         }else{
-            Session::flash('başarılı',"Kullanıcı Adı ve Email Değiştirildi.");
+            Session::flash('başarılı',"Profil Değiştirildi.");
+        }
+        if ($request->hasFile('resim')) {
+            $img=$request->file('resim');
+            $filename=$this->self_url($user->name).".".$img->getClientOriginalExtension();
+            $location=public_path('img/user/'.$filename);
+            Image::make($img)->resize(500,333)->save($location);
+            $user->resim=$filename;
+            Session::flash('başarılı',"Resim Değiştirildi.");
         }
         $user->save();
-        return redirect()->route("profil");
+        return redirect()->back();
     }
     public function blog(){
         $blog=Blog::paginate(6);
@@ -232,5 +241,11 @@ class IndexController extends Controller{
     public function blog_post($url){
         $blog=Blog::where("url","=",$url)->firstOrFail();
         return view("blog_post")->withBlog($blog);
+    }
+    function self_url($title){
+        $search = array(" ","ö","ü","ı","ğ","ç","ş","/","?","&","'",",","A","B","C","Ç","D","E","F","G","Ğ","H","I","İ","J","K","L","M","N","O","Ö","P","R","S","Ş","T","U","Ü","V","Y","Z","Q","X");
+        $replace = array("-","o","u","i","g","c","s","-","","-","","","a","b","c","c","d","e","f","g","g","h","i","i","j","k","l","m","n","o","o","p","r","s","s","t","u","u","v","y","z","q","x");
+        $new_text = str_replace($search,$replace,trim($title));
+        return $new_text;
     }
 }

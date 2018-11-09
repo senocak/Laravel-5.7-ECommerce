@@ -19,7 +19,7 @@
                 @if (Session::has('hata'))
                     <div class="alert alert-warning">{{Session::get('hata')}}</div>
                 @endif
-                <form action="{{route("admin.update",$user)}}" method="POST">
+                <form action="{{route("admin.update",$user)}}" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }} 
                     <input id="name" type="text" name="name" value="{{$user->name}}" placeholder="Name" required="">
                     <input id="email" type="email" name="email" value="{{$user->email}}" placeholder="Name" required="">
