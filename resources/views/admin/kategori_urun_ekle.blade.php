@@ -1,10 +1,13 @@
 @extends("admin.index")
-@section("title"," Kategori'ye üürün Ekle")
+@section("title"," Kategori'ye Ürün Ekle")
 @section("admin_icerik") 
     <script src="{{url("/")}}/editor/ckeditor/ckeditor.js"></script> 
     <br><br>
-    <form method="POST" action="{{route("kategori.urun_ekle_post",$kategoriId)}}">
+    <form method="POST" action="{{route("kategori.urun_ekle_post",$kategori->id)}}">
         {{ csrf_field() }}
+        <div class="form-group">
+            <input type="text" class="form-control" disabled readonly value="{{$kategori->isim}}">
+        </div>
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Ürün Başlığı" name="isim" required>
         </div>

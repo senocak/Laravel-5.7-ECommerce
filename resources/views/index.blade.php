@@ -33,7 +33,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color:gray">
                                 <a class="dropdown-item" href="{{route("profil")}}">Profil</a>
                                 <a class="dropdown-item" href="{{route("siparis")}}">Siparişlerim</a> 
-                                <a class="dropdown-item" href="{{route("logout")}}">Çıkış Yap</a> 
+                                <a class="dropdown-item" href="{{route("cikis")}}">Çıkış Yap</a> 
                             </div> 
                         @else
                             <li><a href="{{route("login")}}">Giriş Yap</a></li>

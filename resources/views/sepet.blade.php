@@ -97,58 +97,47 @@
     </div>
     <div class="cart-section container" style="width: 100%">
         <div>
-            @if(Cart::instance("kaydet")->count()>0)
-                <h2>{{Cart::instance("kaydet")->count()}} ürün kayıtlı</h2>
-                <div class="cart-table">
-                    @foreach(Cart::instance("kaydet")->content() as $urun)
-                        <div class="cart-table-row">
-                            <div class="cart-table-row-left">
-                                <a href="{{route("ürün.detay",$urun->model->url)}}">
-                                    @if(count($urun->model->resim)>0)
-                                        @php($i=1)
-                                        @foreach($urun->model->resim as $resim)
-                                            @if($i==1)
-                                                <img src="{{url("/")}}/img/urunler/{{$resim->resim}}" class="img-fluid">
-                                            @endif
-                                            @php($i++)
-                                        @endforeach
-                                    @else
-                                        <img src="{{url("/")}}/img/urunler/no-image.png" class="img-fluid" width="180px">
+            <h2>{{count($kaydets)}} ürün kayıtlı</h2>
+            @forelse ($kaydets as $kaydet)
+                <div class="cart-table-row">
+                    <div class="cart-table-row-left">
+                        <a href="{{route("ürün.detay",$kaydet->urunler["url"])}}">
+                            @if(count($kaydet->urunler->resim)>0)
+                                @php($i=1)
+                                @foreach($kaydet->urunler->resim as $resim)
+                                    @if($i==1)
+                                        <img src="{{url("/")}}/img/urunler/{{$resim->resim}}" class="img-fluid">
                                     @endif
-                                </a>
-                                
-                                <div class="cart-item-details">
-                                    <div class="cart-table-item"><a href="{{route("ürün.detay",$urun->model->url)}}">{{$urun->name}}</a></div>
-                                    <div class="cart-table-description">{{$urun->model->detay}}</div>
-                                </div>
-                            </div>
-                            <div class="cart-table-row-right">
-                                <div class="cart-table-actions">
-                                    <form action="{{route("kaydet.urunsil",$urun->rowId)}}" method="POST">
-                                        {{csrf_field()}}
-                                        {{method_field('DELETE')}}
-                                        <button type="submit" class="cart-options">Sil</button>
-                                    </form>
-                                    <form action="{{route("kaydet.sepete_tasi",$urun->rowId)}}" method="POST">
-                                        {{csrf_field()}}
-                                        <button type="submit" class="cart-options">Sepete Taşı</button>
-                                    </form>
-                                </div>
-                                <div>
-                                    <select class="quantity_saved">
-                                        <option selected="">1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                    </select>
-                                </div>
-                                <div>{{$urun->price}}</div>
-                            </div>
+                                    @php($i++)
+                                @endforeach
+                            @else
+                                <img src="{{url("/")}}/img/urunler/no-image.png" class="img-fluid" width="180px">
+                            @endif
+                        </a>
+                        
+                        <div class="cart-item-details">
+                            <div class="cart-table-item"><a href="{{route("ürün.detay",$kaydet->urunler["url"])}}">{{$kaydet->urunler["isim"]}}</a></div>
+                            <div class="cart-table-description">{{$kaydet->urunler["detay"]}}</div>
                         </div>
-                    @endforeach
+                    </div>
+                    <div class="cart-table-row-right">
+                        <div class="cart-table-actions">
+                            <form action="{{route("kaydet.urunsil",$kaydet->id)}}" method="POST">
+                                {{csrf_field()}}
+                                {{method_field('DELETE')}}
+                                <button type="submit" class="cart-options">Sil</button>
+                            </form>
+                            <form action="{{route("kaydet.sepete_tasi",$kaydet->urunler["id"])}}" method="POST">
+                                {{csrf_field()}}
+                                <button type="submit" class="cart-options">Sepete Ekle</button>
+                            </form>
+                        </div>
+                        <div>{{$kaydet->urunler["fiyat"]}}₺</div>
+                    </div>
                 </div>
-            @endif
+            @empty
+                Kayıtlı Ürün Bulunamadı
+            @endforelse
         </div>
     </div>
 @endsection

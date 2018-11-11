@@ -1,9 +1,12 @@
 <?php
 namespace App\Http\Controllers;
+use Image; 
+use Storage;
 use App\Blog;
 use App\Urun;
 use App\User;
 use App\Kupon;
+use App\Kaydet;
 use App\Kategori;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -12,8 +15,6 @@ use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Cartalyst\Stripe\Exception\CardErrorException;
-use Image; 
-use Storage;
 
 class IndexController extends Controller{
     public function anasayfa_index(){
@@ -47,7 +48,8 @@ class IndexController extends Controller{
         return view("urun")->withUrun($urun);
     }
     public function sepet(){
-        return view("sepet");
+        $kaydet=Kaydet::where("kullanici_id",Auth::user()->id)->get();
+        return view("sepet")->withKaydets($kaydet);
     }
     public function sepete_ekle(Request $request){
         $aynisi=Cart::search(function ($cartItem,$rowId)use($request){
@@ -70,6 +72,7 @@ class IndexController extends Controller{
         return redirect()->route("sepet");
     }
     public function sepet_kaydet($id){
+        /*
         $item=Cart::get($id);
         Cart::remove($id);
         $aynisi=Cart::instance("kaydet")->search(function ($cartItem,$rowId)use($id){
@@ -79,17 +82,49 @@ class IndexController extends Controller{
             Session::flash('başarılı',"Ürün Zaten Kaydedilmiş.");
             return redirect()->route("sepet");
         }
-
         Cart::instance("kaydet")->add($item->id, $item->name, 1, $item->price)->associate('App\Urun');
         Session::flash('başarılı',"Ürün Sonrası için Kaydedildi.");
         return redirect()->route("sepet");
+        */
+        $urun_id=Cart::get($id)->id;
+        $kullanici_id=Auth::user()->id;
+        $kaydet=Kaydet::where("urun_id",$urun_id)->where("kullanici_id",$kullanici_id)->get();
+        if(count($kaydet)>0){
+            Session::flash('başarılı',"Ürün Zaten Kaydedilmiş.");
+            return redirect()->route("sepet");
+        }else{
+            $kaydet= new Kaydet;
+            $kaydet->kullanici_id=$kullanici_id;
+            $kaydet->urun_id=$urun_id;
+            $kaydet->save();
+            Session::flash('başarılı',"Ürün Sonrası için Kaydedildi.");
+            Cart::remove($id);
+            return redirect()->route("sepet");
+        }
     }
     public function kaydet_urunsil($id){
-        Cart::instance("kaydet")->remove($id);
+        //Cart::instance("kaydet")->remove($id);
+        $kaydet=Kaydet::findOrFail($id);
+        $kaydet->delete();
         Session::flash('başarılı',"Ürün Silindi.");
         return redirect()->route("sepet");
     }
     public function sepete_tasi($id){
+        $aynisi=Cart::search(function ($cartItem,$rowId)use($id){
+            return $cartItem->id===$id;
+        });
+        if ($aynisi->isNotEmpty()){
+            Session::flash('başarılı',"Ürün Zaten Sepette.");
+            return redirect()->route("sepet");
+        }
+        $urun=Urun::findOrFail($id);
+        Cart::add($urun->id, $urun->isim, 1, $urun->fiyat)->associate('App\Urun');
+        Session::flash('başarılı',"Ürün Sepete Eklendi.");
+        return redirect()->route("sepet");
+        
+
+
+
         $item=Cart::instance("kaydet")->get($id);
         Cart::instance("kaydet")->remove($id);
 
@@ -150,6 +185,9 @@ class IndexController extends Controller{
                 ],
             ]);
             Cart::instance("default")->destroy();
+            
+            DB::insert('insert into sepet (urun_id, kullanici_id) values (?, ?)', [$urun->id, Auth::user()->id]);
+
             Session::flash('başarılı',"Ödemeniz başarıyla gerçekleşti.");
             return redirect()->route("tamamlandi")->with('başarılı',"Ödemeniz başarıyla gerçekleşti.");
         }catch (CardErrorException $e){
@@ -233,6 +271,12 @@ class IndexController extends Controller{
         }
         $user->save();
         return redirect()->back();
+    }
+    public function cikis(){
+        Auth::logout();
+        Session::flush();
+        Cart::destroy();
+        return redirect("/login");
     }
     public function blog(){
         $blog=Blog::paginate(6);

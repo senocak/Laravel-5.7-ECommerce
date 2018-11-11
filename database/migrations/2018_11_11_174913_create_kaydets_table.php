@@ -4,9 +4,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateShoppingcartTable extends Migration{
+class CreateKaydetsTable extends Migration{
     public function up(){
-        Schema::create(config('cart.database.table'), function (Blueprint $table) {
+        Schema::create('kaydets', function (Blueprint $table) {
             $table->increments('id');
             
             $table->integer("urun_id")->unsigned();
@@ -15,10 +15,10 @@ class CreateShoppingcartTable extends Migration{
             $table->integer("kullanici_id")->unsigned();
             $table->foreign('kullanici_id')->references('id')->on('users');
 
-            $table->nullableTimestamps();
+            $table->timestamps();
         });
     }
     public function down(){
-        Schema::drop(config('cart.database.table'));
+        Schema::dropIfExists('kaydets');
     }
 }

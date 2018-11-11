@@ -1,6 +1,12 @@
 @extends("admin.index")
 @section("title"," - Tüm Kategoriler")
 @section("admin_icerik")  
+    @if (Session::has('başarılı'))
+        <div class="alert alert-success">{{Session::get('başarılı')}}</div>
+    @endif
+    @if (Session::has('hata'))
+        <div class="alert alert-warning">{{Session::get('hata')}}</div>
+    @endif
     <form class="md-form" method="POST" action="{{ route('kategori.ekle') }}">
         {{ csrf_field() }}
         <div class="form-group"> 
@@ -20,7 +26,7 @@
             </thead>
             <tbody>
                 @php($i=1)
-                @foreach ($kategoriler as $kategori)
+                @forelse($kategoriler as $kategori)
                     <tr>
                         <th scope="row">{{$i}}</th>
                         <td>
@@ -29,7 +35,7 @@
                                 <div class="row">
                                     <div class="col-xs-4"><input type="text" class="form-control" value="{{$kategori->isim}}" name="isim" required></div>
                                     <div class="col-xs-4"><button type="submit" class="btn btn-warning"><i class="fa fa-edit"></i> Güncelle</button> </div>
-                                    <div class="col-xs-4"><a href="" ><button class="btn btn-danger"><i class="fa fa-remove"></i> Sil</button></a></div>
+                                    <div class="col-xs-4"><a href="{{route("kategori.sil",$kategori->id)}}" class="btn btn-danger"><i class="fa fa-remove"></i> Sil</a></div>
                                 </div>
                             </form>
                         </td> 
@@ -39,7 +45,9 @@
                         </td>
                     </tr>
                     @php($i++)
-                @endforeach
+                @empty
+                    <tr><td>Değer Yok</td></tr>
+                @endforelse
             </tbody>
         </table>
     </div>
