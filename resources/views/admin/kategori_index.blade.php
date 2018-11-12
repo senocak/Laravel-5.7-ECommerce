@@ -1,5 +1,10 @@
 @extends("admin.index")
 @section("title"," - Tüm Kategoriler")
+@section('css')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <style type="text/css">.sortable { cursor: move; }</style>
+@endsection
 @section("admin_icerik")  
     @if (Session::has('başarılı'))
         <div class="alert alert-success">{{Session::get('başarılı')}}</div>
@@ -24,11 +29,12 @@
                     <th scope="col">İşlemler</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="sortable">
                 @php($i=1)
                 @forelse($kategoriler as $kategori)
-                    <tr>
-                        <th scope="row">{{$i}}</th>
+                    <meta name="csrf-token" content="{{ csrf_token() }}">
+                    <tr id="item-{{ $kategori->id }}">
+                        <th class="sortable">{{$i}}</th>
                         <td>
                             <form action="{{route("kategori.duzenle",$kategori->id)}}" method="POST">
                                 {{ csrf_field() }}
@@ -40,9 +46,7 @@
                             </form>
                         </td> 
                         <td>{{date("d.m.Y H:i",strtotime($kategori->created_at))}}</td>
-                        <td>
-                            <a href="{{route("kategori.urun",$kategori->id)}}"><button class="btn btn-primary"><i class="fa fa-plus"></i> Ürünler</button></a>
-                        </td>
+                        <td><a href="{{route("kategori.urun",$kategori->id)}}"><button class="btn btn-primary"><i class="fa fa-plus"></i> Ürünler</button></a></td>
                     </tr>
                     @php($i++)
                 @empty
@@ -52,4 +56,30 @@
         </table>
     </div>
     <div class="spacer"></div> 
+@endsection
+@section('js')
+    <script type="text/javascript"> 
+        var x = document.getElementById("alert"); 
+        $(function() {
+            $( "#sortable" ).sortable({
+                revert: true,
+                handle: ".sortable",
+                stop: function (event, ui) {
+                    var data = $(this).sortable('serialize'); 
+                    $.ajax({
+                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        type: "POST",
+                        dataType: "json",
+                        data: data,
+                        url: '{{route("kategori.sirala")}}',
+                        success: function(msg){  
+                            //alert(msg.islemMsj);
+                            location.reload();
+                        }
+                    });	
+                }
+            });
+            $( "#sortable" ).disableSelection();	                      		
+        });	                      	
+    </script>
 @endsection

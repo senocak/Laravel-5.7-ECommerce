@@ -40,6 +40,7 @@ Route::get('/blog/{url}','IndexController@blog_post')->name("blog.post");
 Route::get('/admin','AdminController@index')->name("admin.anasayfa")->middleware('auth');
 
 Route::get("/admin/kategori","AdminController@kategori_index")->name("kategori.index")->middleware("auth");
+Route::post("/admin/kategori","AdminController@kategori_sirala")->name("kategori.sirala")->middleware("auth");
 Route::post("/admin/kategori/ekle","AdminController@kategori_ekle")->name("kategori.ekle")->middleware("auth");
 Route::get("/admin/kategori/{kategori_id}","AdminController@kategori_urun")->name("kategori.urun_index")->middleware("auth");
 Route::post("/admin/kategori/{kategori_id}/duzenle","AdminController@kategori_duzenle")->name("kategori.duzenle")->middleware("auth");

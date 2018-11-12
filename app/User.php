@@ -8,4 +8,7 @@ class User extends Authenticatable{
     use Notifiable;
     protected $fillable = ['name', 'email', 'password',];
     protected $hidden = ['password', 'remember_token',];
+    public function kaydet(){
+        return $this->belongsTo('App\Kaydet','kullanici_id');
+    }
 }

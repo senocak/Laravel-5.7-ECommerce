@@ -10,6 +10,7 @@ class CreateKategorisTable extends Migration{
             $table->increments('id');
             $table->string("isim")->unique();
             $table->string("url")->unique();
+            $table->integer("sira")->default(0);
             $table->timestamps();
         });
     }

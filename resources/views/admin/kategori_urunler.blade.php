@@ -27,7 +27,7 @@
                     <tr>
                         <th scope="row">{{$i}}</th>
                         <td>{{$urun->isim}}</td>
-                        <td>{{$urun->fiyat}}</td>
+                        <td>{{$urun->fiyat}}₺</td>
                         <td>{{$urun->detay}}</td>
                         <td>
                             <label class="container">

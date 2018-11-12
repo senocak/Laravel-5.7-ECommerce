@@ -38,5 +38,5 @@
 			filebrowserImageUploadUrl: '{{url("/")}}/editor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
 			filebrowserFlashUploadUrl: '{{url("/")}}/editor/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
 		}); 
-	</script>
+    </script>
 @endsection

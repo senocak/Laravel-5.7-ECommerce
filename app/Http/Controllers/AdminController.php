@@ -5,6 +5,7 @@ use App\Urun;
 use App\User;
 use App\Kupon;
 use App\Resim;
+use App\Kaydet;
 use App\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +36,7 @@ class AdminController extends Controller{
     }
     public function kategori_index(){
         if((Auth::user()->admin)==true){
-            $kategoriler=Kategori::all();
+            $kategoriler=Kategori::orderBy("sira",'asc')->get();
             return view("admin.kategori_index")->withKategoriler($kategoriler);
         }else{
             return redirect("/");
@@ -223,6 +224,19 @@ class AdminController extends Controller{
             return redirect("/");
         }
     }
+    public function kategori_sirala(Request $request){
+        if((Auth::user()->admin)==true){
+            foreach ( $request->item as $key => $value ){ 
+                $category=Kategori::find($value);
+                $category->sira=$key;
+                $category->save();    
+            }
+            Session::flash('başarılı','İçeriklerin sırala işlemi güncellendi');
+            return array( 'islemSonuc' => true , 'islemMsj' => 'İçeriklerin sırala işlemi güncellendi' );
+        }else{
+            return redirect("/");
+        }
+    }
     public function kupon(){
         if((Auth::user()->admin)==true){
             $kupon=Kupon::all();
@@ -399,7 +413,8 @@ class AdminController extends Controller{
     public function kulanicilar_index(){
         if((Auth::user()->admin)==true){
             $kullanicilar=User::all();
-            return view("admin.kullanicilar_index")->withKullanicilar($kullanicilar);
+            $kaydet=Kaydet::all();
+            return view("admin.kullanicilar_index")->withKullanicilar($kullanicilar)->withKaydets($kaydet);
         }else{
             return redirect("/");
         }

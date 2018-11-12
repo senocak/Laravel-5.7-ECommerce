@@ -24,7 +24,7 @@ class IndexController extends Controller{
     }
     public function urun_index(){
         $sayfa=6;
-        $kategoriler=Kategori::all();
+        $kategoriler=Kategori::orderBy("sira","asc")->get();
         if(\request()->kategori){
             $urunler=Urun::with("kategoriler")->whereHas('kategoriler',function ($query){
                 $query->where('url',\request()->kategori);
@@ -35,9 +35,9 @@ class IndexController extends Controller{
             $kategoriİsmi="Ürünler";
         }
         if (\request()->fiyat=="azalan"){
-            $urunler=$urunler->orderBy("fiyat",'asc')->paginate($sayfa);
-        }else if (\request()->fiyat=="artan"){
             $urunler=$urunler->orderBy("fiyat",'desc')->paginate($sayfa);
+        }else if (\request()->fiyat=="artan"){
+            $urunler=$urunler->orderBy("fiyat",'asc')->paginate($sayfa);
         }else{
             $urunler=$urunler->paginate($sayfa);
         }

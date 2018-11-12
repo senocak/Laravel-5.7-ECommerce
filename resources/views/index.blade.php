@@ -9,12 +9,12 @@
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat%7CRoboto:300,400,700" >
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="{{url("/")}}/css/font-awesome.min.css">
+        <!--<link rel="stylesheet" href="{{url("/")}}/css/font-awesome.min.css">-->
         <link rel="stylesheet" href="{{url("/")}}/css/bootstrap.min.css" id="bootstrap-css">
         <!-- Styles -->
         <link rel="stylesheet" href="{{url("/")}}/css/app.css">
         <link rel="stylesheet" href="{{url("/")}}/css/responsive.css">
-        @yield("css")
+        @yield("css")        
     </head>
     <body>
         <header class="with-background">
@@ -29,7 +29,7 @@
                 <div class="top-nav-right">
                     <ul>
                         @if (Auth::check())
-                            <li id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a>{{Auth::user()->name}}</a></li>
+                            <li id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a><img src="{{url("/")}}/img/user/{{Auth::user()->resim}}" width="30px"> {{Auth::user()->name}}</a></li>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color:gray">
                                 <a class="dropdown-item" href="{{route("profil")}}">Profil</a>
                                 <a class="dropdown-item" href="{{route("siparis")}}">Siparişlerim</a> 
@@ -60,7 +60,7 @@
                 </div>
             </div>
         </footer>
-        <script src="{{url("/")}}/js/app.js"></script>
+        <!--<script src="{{url("/")}}/js/app.js"></script>-->
         <script>
             (function(){
                 const currentImage = document.querySelector('#currentImage');
