@@ -100,13 +100,14 @@ class AdminController extends Controller{
     public function kategori_urun_ekle($kategori_id){
         if((Auth::user()->admin)==true){
             $kategori=Kategori::findOrFail($kategori_id);
-            return view("admin.kategori_urun_ekle")->withKategori($kategori);
+            $kategoriler=Kategori::all();
+            return view("admin.kategori_urun_ekle")->withKategoriOnly($kategori)->withKategoriler($kategoriler);
         }else{
             return redirect("/");
         }
     }
     public function kategori_urun_ekle_post(Request $request,$kategori_id){
-        if((Auth::user()->admin)==true){ 
+        if((Auth::user()->admin)==true){
             $this->validate($request,array(
                 'isim'  =>  'required',
                 'detay' =>  'required',
@@ -123,7 +124,8 @@ class AdminController extends Controller{
                 $urun->onecikan=true;
             }
             $urun->save();
-            DB::insert('insert into kategori_urun (urun_id, kategori_id) values (?, ?)', [$urun->id, $kategori_id]);
+            $urun->kategoriler()->sync($request->kategoriler,false);
+            //DB::insert('insert into kategori_urun (urun_id, kategori_id) values (?, ?)', [$urun->id, $kategori_id]);
             $kategori=Kategori::findOrFail($kategori_id);
             $urunler=$kategori->urunler;
             Session::flash('başarılı',"Ürün Eklendi.");

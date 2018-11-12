@@ -6,10 +6,12 @@ use App\Blog;
 use App\Urun;
 use App\User;
 use App\Kupon;
+use App\Sepet;
 use App\Kaydet;
 use App\Kategori;
 use function foo\func;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -121,10 +123,7 @@ class IndexController extends Controller{
         Cart::add($urun->id, $urun->isim, 1, $urun->fiyat)->associate('App\Urun');
         Session::flash('başarılı',"Ürün Sepete Eklendi.");
         return redirect()->route("sepet");
-        
-
-
-
+        /*
         $item=Cart::instance("kaydet")->get($id);
         Cart::instance("kaydet")->remove($id);
 
@@ -139,6 +138,7 @@ class IndexController extends Controller{
         Cart::instance("default")->add($item->id, $item->name, 1, $item->price)->associate('App\Urun');
         Session::flash('başarılı',"Ürün Sepete Gönderildi.");
         return redirect()->route("sepet");
+        */
     }
     public function sepet_urun_adet_guncelle(Request $request,$id){
         if ($request->quantity<0 or $request->quantity>5){
@@ -158,6 +158,7 @@ class IndexController extends Controller{
         ]);
     }
     public function odemeyap(Request $request){
+        
         $this->validate($request,array(
             'email'       => 'required|email',
             'isim'        => 'required',
@@ -173,10 +174,10 @@ class IndexController extends Controller{
         })->values()->toJson();
         try{
             $odeme=Stripe::charges()->create([
-                'amount'=>$this->getNumbers()->get('yeniTotal'),
+                'amount'=>Cart::total(),
                 'currency'=>'TRY',
                 'source'=>$request->stripeToken,
-                'description'=>$request->isim." kişinin ödemesi",
+                'description'=>$request->name_on_card." kişinin ödemesi",
                 'receipt_email'=>$request->email,
                 'metadata'=>[
                     'ürünler'=>$contents,
@@ -184,10 +185,14 @@ class IndexController extends Controller{
                     'indirim'=>collect(session()->get("kupon"))->toJson(),
                 ],
             ]);
+            foreach(Cart::content() as $urun){
+                $sepet=new Sepet;
+                $sepet->urun_id=$urun->model->id;
+                $sepet->kullanici_id=Auth::user()->id;
+                $sepet->save();
+                //DB::insert('insert into sepet (urun_id, kullanici_id) values (?, ?)', [$urun->model->id, Auth::user()->id]);
+            }
             Cart::instance("default")->destroy();
-            
-            DB::insert('insert into sepet (urun_id, kullanici_id) values (?, ?)', [$urun->id, Auth::user()->id]);
-
             Session::flash('başarılı',"Ödemeniz başarıyla gerçekleşti.");
             return redirect()->route("tamamlandi")->with('başarılı',"Ödemeniz başarıyla gerçekleşti.");
         }catch (CardErrorException $e){
@@ -271,6 +276,10 @@ class IndexController extends Controller{
         }
         $user->save();
         return redirect()->back();
+    }
+    public function siparis (){
+        $siparisler=Sepet::where("kullanici_id",Auth::user()->id)->get();
+        return view("siparis")->withSiparisler($siparisler);
     }
     public function cikis(){
         Auth::logout();

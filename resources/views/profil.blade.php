@@ -1,6 +1,17 @@
 @extends("index")
 @section("title"," Profil")
 @section("içerik")
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" href="{{route("profil")}}">Profilim</a></li>
+            <li class="nav-item active"><a class="nav-link" href="{{route("siparis")}}">Siparişlerim</a></li>
+          </ul> 
+          <div class="form-inline my-2 my-lg-0"> 
+            <a class="btn btn-outline-success my-2 my-sm-0" href="{{route("cikis")}}">Çıkış Yap</a>
+          </div>
+        </div>
+      </nav>
     <div class="products-section container">
             <div class="sidebar">
                 <div class="container">

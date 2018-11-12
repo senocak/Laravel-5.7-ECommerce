@@ -1,12 +1,24 @@
 @extends("admin.index")
 @section("title"," Kategori'ye Ürün Ekle")
-@section("admin_icerik") 
+@section('css')
     <script src="{{url("/")}}/editor/ckeditor/ckeditor.js"></script> 
-    <br><br>
-    <form method="POST" action="{{route("kategori.urun_ekle_post",$kategori->id)}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+
+    <link href="{{url("/")}}/css/select2.min.css" rel="stylesheet" />
+    <script src="{{url("/")}}/js/select2.min.js"></script>
+@endsection
+@section("admin_icerik") 
+    <br>
+    <form method="POST" action="{{route("kategori.urun_ekle_post",$kategoriOnly->id)}}">
         {{ csrf_field() }}
         <div class="form-group">
-            <input type="text" class="form-control" disabled readonly value="{{$kategori->isim}}">
+            <select class="js-example-basic-multiple form-control" name="kategoriler[]" multiple="multiple">
+                @forelse ($kategoriler as $kategori)
+                    <option value="{{$kategori->id}}" @if($kategori->isim==$kategoriOnly->isim) selected @endif>{{$kategori->isim}}</option>
+                @empty
+                    <option>Kategori Yok</option>
+                @endforelse
+            </select>
         </div>
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Ürün Başlığı" name="isim" required>
@@ -27,6 +39,14 @@
         <button type="submit" class="btn btn-primary">Ekle</button>
     </form> 
     <div class="spacer"></div> 
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2();
+        });
+    </script>
 	<script language="javascript" type="text/javascript">
 		CKEDITOR.replace('editor1',{
 			filebrowserWindowWidth: '900',
