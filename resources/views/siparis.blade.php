@@ -18,7 +18,6 @@
                 <div class="order-container"> 
                     <div class="order-products"><hr>
                         @forelse($siparisler as $siparis)
-                        
                             <div class="order-product-item">
                                 <div>                                
                                     @if(count($siparis->resim)>0)

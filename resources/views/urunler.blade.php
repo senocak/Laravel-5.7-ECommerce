@@ -42,7 +42,7 @@
                                 @php($i=1)
                                 @foreach($urun->resim as $resim)
                                     @if($i==1)
-                                        <img src="{{url("/")}}/img/urunler/{{$resim->resim}}" class="img-fluid">
+                                        <img src="{{url("/")}}/img/urunler/{{$resim->resim}}" class="img-fluid" width="100px">
                                     @endif
                                     @php($i++)
                                 @endforeach
